@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>测试定时器</title>
+    <script language="javascript">
+      function fWindow(){
+            //var floater = window.open("page.html", "", "height = 175, width = 300, scrollbars = no");
+            //setTimeout(floater.close,3000);
+            //floater.close();
+             window.close();
+        }
+
+    </script>
+</head>
+<!--<body onLoad="setTimeout('window.opener=null;window.close()',3000);" >-->
+<body onLoad="setTimeout('fWindow()',1000);" >
+支付成功！
+</body>
+</html>
+<!--
+<!--
+<html>
+<head>
+    <title>支付结果</title>
+        <script type="text/javascript">
+                function webpageClose(){
+                    window.close();
+                }
+        //setTimeout(webpageClose ,1000)//1s钟后关闭
+    </script>
+</head>
+<body onLoad="setTimeout('webpageClose()',1000);" >
+
+<p>支付成功！</p>
+</body>
+</html>-->

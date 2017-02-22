@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <style>
+        #people  th{
+            text-align:center;
+            border-bottom:1px solid #8A8A8A;
+
+        }
+    </style>
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script>
+        function buyTickets(aa) {
+            //列车信息
+            var cal = aa.className;
+            var newprice = cal.split(" ");
+            var tt = newprice['1'];
+            var tab = document.getElementById('ticket');
+            //var trs = document.getElementById('ticket').getElementsByTagName('tr');
+            var rows = tab.rows;
+           /* var val = "";
+            var num = "1";
+            var newtt = parseInt(tt) + parseInt(num) + parseInt(tt);//新一行
+            var nextt = (parseInt(tt) + parseInt(1)) * parseInt(2);
+            val += rows[newtt].cells[0].innerHTML + ' ';
+            val += rows[newtt].cells[1].innerHTML + ' ';
+            val += rows[newtt].cells[2].innerHTML + ' ';*/
+            for (var j = 0; j < rows[newtt].cells.length; j++) {
+
+                if (rows[nextt].cells[j].innerHTML != "") {
+                    val += rows[0].cells[j].innerHTML + ' ';  //显示th行信息
+                    val += rows[nextt].cells[j].innerHTML + ' ';
+                    val += rows[newtt].cells[j].innerHTML + ' ';
+                }
+            }
+            str = val.replace(/<\/?[^>]*>/g, ' '); //去除HTML tag
+            var string = str.split(" ");
+            console.log(string);
+            var info = "";
+            info += '<div><p style="height:25px;padding-left:16px;padding-top:4px;background-color:#E7E8E9;border-radius:5px 5px 0px 0px ;">列车信息<span style="font-size:10px;">(以下余票信息仅供参考)</span></p></div>' + '<p style="height:16px;"><span style="margin-left:15px;" >2016-10-09</span><span style="margin-left:15px;font-weight:bold;">' + string['1'] + '</span><span>次</span><span style="margin-left:5px;font-weight:bold;">' + string['4'] + '</span><span style="font-size:12px;color:#6b7a88">站</span><span style="margin-left:5px;font-weight:bold;">(' + string["10"] + '开)</span>——<span style="font-weight:bold;">' + string['6'] + '</span><span style="font-size:12px;color:#6b7a88">站(' + string['13'] + '到)</span></p><p style="margin-bottom:10px;border-bottom: 1px dashed #a1a6a9;height:3px;"></p>';
+            for (var i = 15; i < string.length - 1;) {
+                if (string[i + 2] === "无") {
+                    info += '<span style="margin-left:15px;color:#6b7a88;">' + string[i] + '</span><span style="color:red;color:#6b7a88;">(' + string[i + 1] + ')</span><span style="margin-left:6px;color:#6b7a88;">' + string[i + 2] + '票</span>';
+                } else {
+                    info += '<span style="margin-left:15px;">' + string[i] + '</span><span>(</span><span style="color:red;">' + string[i + 1] + '</span><span>)</span><span style="margin-left:6px;">' + string[i + 2] + '张票</span>';
+                }
+
+                i = i + 3;
+
+            }
+            $(".train-ticket").append(info);
+
+            //乘客信息
+            var people = "";
+            people = '<div style="margin-top:20px;"><p style="height:25px;padding-left:16px;padding-top:4px;background-color:#E7E8E9;border-radius:5px 5px 0px 0px ;">乘客信息<span style="font-size:10px;">(填写说明)</span></p></div><p style="border-bottom: 1px dashed #a1a6a9;height:16px;"></p><table  id="people" style="background-color:#303030; width:100%;height: 28px;line-height: 28px;text-align: left;padding-left: 5px;font-weight: 400;border-top:1px solid #a6a9ab;border-right:1px solid #a6a9ab;border-left:1px solid #a6a9ab;border-bottom:1px solid #a6a9ab;"><tr style="border-bottom:1px solid red;" ><th>序号</th><th>席别</th><th>票种</th><th>姓名</th><th>证件类型</th><th>证件号码</th><th>手机号</th></tr><tr style="height:39px;text-align:left;"><td>1</td><td><select   id="zuowei" value="0">';
+            for (var i = 15; i < string.length - 1;) {
+                if (string[i + 2] === "无") {
+
+                }else{
+                    people +='<option value="1">'+string[i]+'('+string[i+1]+')</option>'
+                }
+                i = i + 3;
+            }
+            people += '</select></td><td><select name="ticket_type"><option value="1">成人票</option><option vlaue="2">儿童票</option><option vlaue="3" >学生票</option><option vlaue="4">残军票</option></select></td><td><input type="text" name="passenagename" value="" readonly/></td><td><select disabled="disabled"><option>二代身份证</option></select></td><td ><input name="" type="text" value="" readonly/></td><td><input type="text" name="" value="" readonly/></td></tr></table><br/><div style="background:#E7E8E9;padding:10px;margin-left:15px;border-radius:5px;width:70px;cursor:pointer;"> <div onclick="showA()">新增乘客</div></div><p style="border-bottom: 1px dashed #a1a6a9;height:3px;"></p>';
+         /*   people +='<div class="okcoinPop" id="withdrawPeople" style="display:none;"><div class="dialog_content" id="dialog_content_People" style="margin-left: 10px; margin-top: 40px; left: 50%; top: 21px;"> <div class="dialog_title" id="dialog_title_People"> <span id="peopleTitle">添加</span> <a href="javascript:closeAdd();" class="dialog_closed" title="关闭"></a> </div> ' +
+                    '<table  style="background-color:#E7E8E9; width:100%;height: 28px;line-height: 28px;text-align: left;padding-left: 5px;font-weight: 400;border-bottom: 1px solid #999;border-top:1px solid #a6a9ab;border-right:1px solid #a6a9ab;border-left:1px solid #a6a9ab;border-bottom:1px solid #a6a9ab;"><tr style="border-bottom:1px solid #a6a9ab;"><th>票种</th><th>姓名</th><th>证件类型</th><th>证件号码</th><th>手机号</th></tr><tr style="height:39px;text-align:left;"><td><select name="ticket_type"><option value="1">成人票</option><option value="2">儿童票</option><option value="4">残军票</option></select></td><td><input name="personname" type="text" value=""/></td><td><select name="id-type"><option value="1">二代身份证</option><option value="C">港澳通行证</option><option value="G">台湾通行证</option><option value="B">护照</option></select></td><td><input type="text" name="idcard"/></td><td><select name="country"><option value="CN">中国CHINA</option></select></td></tr></table>  </div></div>';*/
+            people +='<div class="okcoinPop" id="withdrawPeople" style="display:none;"> <div class="dialog_content" id="dialog_content_People" style="margin-left:10px;margin-top:100px; left: 50%; top: 21px;"> <div class="dialog_title" id="dialog_title_People"> <span id="peopleTitle">新增乘客</span> <a href="javascript:close();" class="dialog_closed" title="关闭"></a> </div> <div class="dialog_body center"> <div style="line-height: 35px; text-align: left; padding-left: 50px;"><table  style="background-color:#E7E8E9; width:100%;height: 28px;line-height: 28px;text-align: left;padding-left: 5px;font-weight:400;border-bottom: 1px solid #999;border-top:1px solid #a6a9ab;border-right:1px solid #a6a9ab;border-left:1px solid #a6a9ab;border-bottom:1px solid #a6a9ab;"><tr style="border-bottom:1px solid #a6a9ab;"><th align="center">票种</th><th align="center">姓名</th><th align="center">证件类型</th><th align="center">证件号码</th><th align="center">国家/地区</th></tr><tr style="height:39px;text-align:left;"><td><select name="ticket_type"><option value="1">成人票</option><option value="2">儿童票</option><option value="4">残军票</option></select></td><td><input name="personname" type="text" value=""/></td><td><select name="id-type"><option value="1">二代身份证</option><option value="C">港澳通行证</option><option value="G">台湾通行证</option><option value="B">护照</option></select></td><td><input type="text" name="idcard"/></td><td><select name="country"><option value="CN">中国CHINA</option></select></td></tr></table> <p><div class="lay-btn"><a href="javascript:" id="dialog_add_cancel" class="btn92" shape="rect">取消</a> <a href="javascript:" id="dialog_add_ok" class="btn92s" shape="rect">确认</a> </div></p> </div> </div> </div> </div>';
+            people +='<div id="dialogBoxShadow" style="position: absolute; top: 0px; left: 0px; z-index: 100; background-color: rgb(0, 0, 0); opacity: 0.4; width: 100%; background-position: initial initial; background-repeat: initial initial; display: none;"></div>';
+            /*people +='<div class="up-box" style="width:800px;"><div class="up-box-hd">新增乘客<a href="javascript:" id="dialog_add_close" shape="rect">关闭</a> </div> <div class="up-box-bd" style="padding:15px 10px;border:1px solid #298CCE;"><table class="per-ticket" style="margin-left:0px;"><tbody><tr><th style="text-align:center;" rowspan="1" colspan="1">票种</th> <th style="text-align:center;" rowspan="1" colspan="1">姓名</th> <th style="text-align:center;" rowspan="1" colspan="1">证件类型</th> <th style="text-align:center;" rowspan="1" colspan="1">证件号码</th> <th style="text-align:center;" rowspan="1" colspan="1">国家/地区</th> </tr><select id="ptypeselect"> <option name="ticket_type_option" value="1">成人票</option> <option value="2">儿童票 </option> <option value="4">残军票 </option> </select> </td> <td rowspan="1" colspan="1"><div><input id="pname_value" class="inptxt w110" type="text"> </div> </td> <td rowspan="1" colspan="1"><select id="typeselect" class="w110"> <option value="1">二代身份证</option> <option value="C">港澳通行证</option> <option value="G">台湾通行证</option> <option value="B">护照</option> </select> </td> <td rowspan="1" colspan="1"><input id="pidno_value" class="inptxt w160" value="" type="text"> </td> <td rowspan="1" colspan="1"> <select id="pcountry_value" class="w160"><option value="CN">中国CHINA </option> </select> </td> </tr> <tr id="error_tr" style="display: none;"><td colspan="5" rowspan="1"><span class="txt-wrong" id="error_for_nameandidno" style="display: none;"></span> </td> </tr>  </table> <div class="lay-btn"><a href="javascript:" id="dialog_add_cancel" class="btn92" shape="rect">取消</a> <a href="javascript:" id="dialog_add_ok" class="btn92s" shape="rect">确认</a> </div> </div>';*/
+            $(".train-ticket").append(people);
+        }
+
+        function showA(){
+            $("#withdrawPeople").show();
+            $("#dialogBoxShadow").show();
+
+        }
+        function closeAdd(){
+            $("#withdrawPeople").hide();
+            $("#dialogBoxShadow").hide();
+        }
+        function del(){
+           $('#ticket tr:gt(0)').remove();
+        }
+        function ee(){
+            if($("#ss").prop("checked")){
+                alert("我是ee");
+            }else {
+                alert("取消啦");
+            }
+
+        }
+
+    </script>
+</head>
+<body>
+
+<div class="train-ticket" style="margin-top:5px; font-size:16px; border:1px solid #E7E8E9;">
+    <table  class="ticket-list" id="ticket" width="100%" border="1" style="border-color:#E7E8E9;text-align:center;" cellpadding="0" cellspacing="0" >
+        <tr style="height:65px;background-color:#E7E8E9;">
+            <th>车次</th>
+            <th><div style="float:left;"><p>出发站</p><p>到达站</p></div></th>
+            <th><div style="float:left;"><p>出发时间</p><p>到达时间<p></div></th>
+            <th>历时</th>
+            <th>商务座</th>
+            <th>特等座</th>
+            <th>一等座</th>
+            <th>二等座</th>
+            <th>高级软卧</th>
+            <th>软卧</th>
+            <th>硬卧</th>
+            <th>软座</th>
+            <th>硬座</th>
+            <th>无座</th>
+            <th>其他</th>
+            <th>备注</th>
+        </tr>
+        <tr class="g48444 t_td "><td>G48</td><td>上海北京</td><td>12:58</td><td>5:33</td><td>8</td><td style="display:none;">￥586</td><td>58</td><td>798</td><td>无</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td><div  class="g48444 0" style="background-color:green;" onclick="buyTickets(this)">购买</div></td></tr>
+
+
+        <tr class="33444 t_td"><td>k33</td><td>上海北京</td><td>18:58</td><td>5:33</td><td><div>8</div><div style="display:none;">￥44444</div></td><td>58</td><td>798</td><td>无</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td><div  class="33444 3" style="background-color:green;" onclick="buyTickets(this)">购买</div></td></tr>
+        <tr class="g48444 t_td"><td></td><td></td><td></td><td></td><td>￥586</td><td>￥5778</td><td>￥798</td><td>￥10</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+
+        <tr class="888844 t_td"><td><strong>G888</strong></td><td><p>上海</p><p>北京</p></td><td><p><strong>06:20</strong></p><p>12:58</p></td><td>5:33</td><td>8</td><td>58</td><td>798</td><td>无</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>55555</td><td><div  class="888844 4" style="background-color:green;" onclick="buyTickets(this)">购买</div></td></tr>
+        <tr class="g48444 t_td"><td></td><td></td><td></td><td></td><td>￥444</td><td>￥5455</td><td>￥777</td><td>￥6666</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+
+    </table>
+
+    <p><span style="margin-left:20px;"><input type="checkbox" id="ss" name="category" value="财经" onclick="ee()"/>财经</span><span style="margin-left:20px;"><input type="checkbox" name="category" value="财经" />财经</span><span style="margin-left:20px;"><input type="checkbox" name="category" value="财经" />财经</span><span><input type="checkbox" name="category" value="财经" />财经</span><span><input type="checkbox" name="category" value="财经" />财经</span></p>
+
+
+
+    <div onclick="del()">点击删除</div>
+    <form   id="formid" method = 'post'  >
+
+    <table id="tickets" border="1"><tr><th>序号</th><th>席位</th><th>姓名</th><th>票型</th><th>证件类型</th><th>证件</th></tr>
+        <tr><td id="xuhao_0"></td><td><select id="zw_0"><option>二等座(￥90.5)</option></select></td><td ><input name="passenger_0" id="passenger_0" value="乘客1"/></td><td><select name="piaotype_0" id="piaotype_0"><option value="c">成人票</option>
+            <option value="e">儿童票</option></select></td><td><select  name="idcardtype_0"　id="idcardtype_0"><option value="2带">二代身份证</option></select></td><td><input name="idcard_0" id="idcard_0" value=""/></td></tr>
+        <tr><td id="xuhao_1">2</td><td ><input name="passenger_1" id="passenger_1" value="乘客2"/></td><td><select name="piaotype_1" id="piaotype_1"><option value="c">成人票</option>
+            <option value="e">儿童票</option></select></td><td><select  name="idcardtype_1"　id="idcardtype_1"><option value="erdai">二代身份证</option></select></td><td><input name="idcard_0" id="idcard_1" value="413026199303179313"/></td></tr>
+        <tr><td id="xuhao_2">3</td><td ><input name="passenger_2" id="passenger_2" value=""/></td><td><select name="piaotype_2" id="piaotype_2"><option value="c">成人票</option>
+            <option value="e">儿童票</option></select></td><td><select  name="idcardtype_2"　id="idcardtype_2"><option value="erdai">二代身份证</option></select></td><td><input name="idcard_2" id="idcard_2" value="413026199303179313"/></td></tr>
+       <!-- <tr><td>2</td><td></td><td><select name="piaotype"><option value="c">成人票</option></select></td><td><select type="idcardtype"><option value="erdai">二代身份证</option></select></td><td>444426199303179313</td></tr>
+        <tr><td>3</td><td>哈哈哈</td><td><select name="piaotype"><option value="c">成人票</option>
+            <option value="e">儿童票</option></select></td><td><select type="idcardtype"><option value="erdai">二代身份证</option></select></td><td>444426199303179313</td></tr>
+        <tr><td>4</td><td>嗯呃</td><td><select name="piaotype"><option value="c">成人票</option></select></td><td><select type="idcardtype"><option value="erdai">二代身份证</option></select></td><td>444426199303179313</td></tr>-->
+
+    </table>
+
+    </form>
+     <input type="submit" value="提交" id="tijiao"  />
+  <p id="p"></p>
+
+
+    <form >
+        <table>
+            <tr><td clsss="p1">沃尔沃</td><td class="p2">大鹏</td><td class="p3">3</td></tr>
+            <tr><td>a</td><td>c</td><td>s</td></tr>
+            <tr><td clss="d1">霜</td><td class="d2">卡斯特罗</td><td>dd</td></tr>
+        </table>
+
+    </form>
+    <input id="test" type="submit" value="提交表单">
+</div>
+</body>
+<script>
+    $("#test").click(function(){
+       var a1 = new Array();
+        for(var i=0; i<5;i++){
+            a1[i]= new Array();
+            a1[i]['pass']="sdf";
+            a1[i]['pass3']="sdfaa";
+            a1[i]['pas22s']="sd342f";
+            a1[i]['pas2s']="sd242f";
+            a1[i]['pa222ss']="22sd2f";
+            a1[i]['3343']="223sdf";
+
+
+
+        }
+        console.log(a1);
+
+
+    });
+        $('#tijiao').click(function(){
+            for(var i=0 ; i<5;i++){
+                if($('#passenger_'+i+'').val() != ""){
+                    if(i=="0"){
+                        var xuhao_0= $('#xuhao_0').html();
+                        var passenger_0= $('#passenger_0').val();
+                        var piaoObj = document.getElementById('zw_0');
+                        var piao= piaoObj.options[piaoObj.selectedIndex].text;
+
+                        var str = piao.split("("); //去除HTML tag
+                        var str2 = str['1'].split(")");
+                        var str3 = str2['0'];
+                        var re = /\d{1,}\.?\d{1,}?$/;
+                        var result=  re.exec(str3);
+
+                        var piaotype_0= $('#piaotype_0  option:selected').val();
+                        var idcardtype_0 = $('#idcardtype_0 option:selected').val();
+                        var idcard_0 = $('#idcard_0').val();
+                        console.log(xuhao_0);
+                        //alert(passenger_0);
+
+                        alert(piao);
+                        alert(str['0']);
+                        alert(str3);
+
+
+                        alert(result);
+
+                        $("#p").append(idcard_0);
+
+
+                    }else if(i=="1"){
+                        var xuhao_1= $('#xuhao_1').html();
+                        var passenger_1= $('#passenger_1').val();
+                        var piaotype_1= $('#piaotype_1  option:selected').val();
+                        var idcardtype_1 = $('#idcardtype_1 option:selected').val();
+                        var idcard_1 = $('#idcard_1').val();
+
+
+                    }
+
+                }else{
+                    /*alert("无答案！");*/
+                }
+            }
+
+        });
+
+       /* var val="";
+        var str ="";
+        var tab = document.getElementById('tickets');
+        var rows = tab.rows;
+        for(var i=1;i<rows.length;i++){
+            for (var j = 0; j < rows[i].cells.length; j++) {
+                if (rows[i].cells[1].innerHTML != "") {
+                    val += rows[i].cells[j].innerHTML + ' ';
+
+                }else{
+                    continue;
+                }
+            }
+        }
+        str = val.replace(/<\/?[^>]*>/g, ' '); //去除HTML tag
+        alert(str);*/
+
+
+
+
+
+</script>
+</html>

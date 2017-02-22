@@ -1,0 +1,30 @@
+<html>
+
+<head>
+    <meta name="viewport"  content="width:divice-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+          charset="UTF-8">
+
+    <title>新页面</title>
+    <script type="text/javascript">
+
+        function parent_click(){
+
+            alert("来自父页面");
+
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+　　<input type="button" value="调用本页面函数" onclick="parent_click();" />
+
+　　<input type="button" value="调用子页面函数" onclick='window.frames["childPage"].child_click();' />
+
+　　<iframe id="childPage" name="childPage" src="child.html" width="100%" frameborder="0"></iframe>
+
+</body>
+
+</html>

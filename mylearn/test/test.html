@@ -1,0 +1,371 @@
+<include file="Public:header"/>
+<div class="autobox">
+    <div class="now">
+        <a href="/" class="orange">{:L('home')}</a> &gt; <a href="/finance/" class="orange">{:L('financial')}</a> &gt; {:L('RMB recharge')}
+    </div>
+    <div class="assets_center clear po_re zin70">
+        <!--左侧菜单-->
+        <include file="Finance:left"/>
+        <!--右侧内容-->
+        <form id="form-cnyin" class="assets_content w900 right bg_w">
+            <div class="safe_center clear" style="padding-left: 0px; border-bottom: 2px solid #E55600;">
+                <h1 style="margin-top: 0px; margin-bottom: 15px; line-height: 15px;">{:L('RMB recharge')}</h1>
+            </div>
+            <div class="sj" style="top: 40px; left: 72px;"></div>
+            <if condition="(LANG_SET) heq 'zh-cn'">
+                <notempty name="prompt_text">
+                    <div class="mytips">
+                        {$prompt_text}
+                    </div>
+                </notempty>
+
+                <else/>
+                <notempty name="prompt_texts">
+                    <div class="mytips">
+                        {$prompt_texts}
+                    </div>
+                </notempty>
+            </if>
+            <div class="choosepaymethod">
+                <div class="choosebanks" style="margin-top: 10px;">
+                    <div class="methodway clearfix">
+                        <div class="w_div clearfix">
+                            <div class="w1">{:L('Account balance')}：</div>
+                            <div class="w2" style="color: #333;">
+                                <img src="__PUBLIC__/Home/images/coin_rmb.png" alt="" style="width: 18px; float: left; margin-top: 8px; margin-right: 5px;"/>
+                                <span>{:L('Available RMB')}(CNY):￥<font class="coin-balance" style="color: #690!important;">{$user_coin['cny']|NumToStr}</font></span>
+                                <apan>
+                                </apan>
+                            </div>
+                        </div>
+                        <div class="w_div clearfix">
+                            <div class="w1">{:L('Pre-paid')}：</div>
+                            <div class="w2">
+                                <span style="position: relative;" class="cc2">
+								<select name="type" id="mycz_type" style="width: 200px; height: 38px;border-radius: 8px;">
+                                    <option value="">---{:L('selective mode')}---</option>
+                                    <if condition="(LANG_SET) heq 'zh-cn'">
+                                        <volist name="myczTypeList" id="vo">
+                                            <option value="{$key}">{$vo}</option>
+                                        </volist>
+                                        <else/>
+                                        <volist name="myczTypeLists" id="vos">
+                                            <option value="{$key}">{$vos}</option>
+                                        </volist>
+                                    </if>
+                                </select>
+                                    <!--<div class="form_explain" data-explain="请确保与汇款人姓名一致<em></em>" style="margin-left:-110px;width:140px">
+                                        <font color="red">请确保与汇款人姓名一致</font><em></em>
+                                    </div>-->
+                                </span>
+                            </div>
+                        </div>
+                        <div class="w_div clearfix">
+                            <div class="w1">{:L('Recharge amount')}：</div>
+                            <div class="w2">
+							<span style="position: relative;" class="cc2" id = "change" >
+                                <input type="text" class="cztxinput" id="mycz_amount" value="" style="border-radius: 8px;">
+                                <div  style="position: absolute;right: 10px;top: -7px;font-size: 14px;color: #333;font-weight: 700;">
+                                    <span  id="random" class="random" style="color:red">.{:tradenob()}</span> {:L('yuan')}</div>
+								<div id="username-msg" class="form_explain" data-explain="{:L('Lowest 100 yuan, up to 50 thousand yuan')}<em></em>" style="margin-left:-110px;width:175px">
+                                    {:L('zd')} <font color="red">100</font>{:L('yuan')}，{:L('zg')} <font color="red">{:L('wuwan')}</font>{:L('yuan')}<em></em>
+                                </div>
+                            </span><!--最低<font color="red">100</font>元，最高<font color="red">50000</font>元<em></em>-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w_div clearfix">
+                        <div class="w1">&nbsp;</div>
+                        <div class="w2">
+                            <input type="button" class="btn-cztx" id="btn-submit" value="{:L('Instant recharge')}" title="{:L('Instant recharge')}" onclick="myczUp()" style="border-radius: 8px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="f_body">
+                <table class="f_table" id="investLog_content">
+                    <thead>
+                    <tr>
+                        <th width="">{:L('Recharge time')}</th>
+                        <th width="">{:L('Recharge order')}</th>
+                        <th width="">
+                            <select name="type-selectTest" id="type-selectTest">
+                                <option value="">{:L('Pre-paid')}</option>
+                                <if condition="(LANG_SET) heq 'zh-cn'">
+                                    <volist name="myczTypeList" id="type">
+                                        <option value="{$key}"
+                                        <eq name="Think.get.type" value="$key">selected</eq>
+                                        >{$type}
+                                        </option>
+                                    </volist>
+                                    <else/>
+                                    <volist name="myczTypeLists" id="types">
+                                        <option value="{$key}"
+                                        <eq name="Think.get.type" value="$key">selected</eq>
+                                        >{$types}
+                                        </option>
+                                    </volist>
+                                </if>
+
+                            </select>
+                        </th>
+                        <th width="">{:L('Amount of charge')}</th>
+                        <th width="">{:L('Actual arrival')}</th>
+                        <!--对状态一些值进行一些判断，不同的值说对应不同的状态；-->
+                        <th width=""><select name="status-selectTest" id="status-selectTest">
+                            <option value="0"
+                            <eq name="status" value="0">selected</eq>
+                            >{:L('state')}</option>
+                            <option value="1"
+                            <eq name="status" value="1">selected</eq>
+                            >{:L('No payment')}</option>
+                            <option value="2"
+                            <eq name="status" value="2">selected</eq>
+                            >{:L('Recharge success')}</option>
+                            <option value="3"
+                            <eq name="status" value="3">selected</eq>
+                            >{:L('Manual arrival')}</option>
+                            <option value="4"
+                            <eq name="status" value="4">selected</eq>
+                            >{:L('In treatment')}</option>
+                        </select></th>
+                        <th width="">{:L('operation')}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="list" id="vo">
+                        <tr>
+                            <td>{$vo.addtime|date='Y-m-d H:i:s',###}</td>
+                            <td>{$vo.tradeno}</td>
+                            <td>
+                                <if condition="(LANG_SET) heq 'zh-cn'">
+                                    {$vo.type}
+                                    <else/>
+                                    {$vo.types}
+                                </if>
+                            </td>
+                            <td>￥{$vo['num']|default="0.00"}</td>
+                            <td>￥{$vo['mum']|default="0.00"}</td>
+                            <td>
+                                <eq name="vo.status" value="0">
+                                    {:L('No payment')}
+                                    <a onclick="myczHuikuan({$vo['id']})" href="javascript:void(0)" style="color: #2674FF!important;">{:L('Already remittance')}</a>
+                                </eq>
+                                <eq name="vo.status" value="1">
+                                    {:L('Recharge success')}
+                                </eq>
+                                <eq name="vo.status" value="2">
+                                    {:L('Manual arrival')}
+                                </eq>
+                                <eq name="vo.status" value="3">
+                                    {:L('In treatment')}
+                                </eq>
+                            </td>
+                            <td>
+                                <eq name="vo.status" value="1">
+                                    <span style="color: #E55600!important;">{:L('Success')}</span>
+                                </eq>
+                                <eq name="vo.status" value="2">
+                                    <span style="color: #E55600!important;">{:L('Success')}</span>
+                                </eq>
+                                <eq name="vo.status" value="3">
+                                    <span style="color: #E55600!important;">{:L('Success')}</span>
+                                </eq>
+                                <eq name="vo.status" value="0">
+                                    <a onclick="myczChakan({$vo['id']})" href="javascript:void(0)" class="cur" style="    color: #E55600!important;">{:L('see')}</a>
+                                </eq>
+
+                            </td>
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+                <!--进行分页的效果-->
+                <div class="pages">{$page}</div>
+            </div>
+    </div>
+    </form>
+</div>
+</div>
+<TABLE border=0 cellSpacing=0 cellPadding=0 width=169>
+    <TBODY>
+    <TR>
+        <TD height=6></TD>
+    </TR>
+    </TBODY>
+</TABLE>
+<!--风险提示-->
+<div class="foot_prompt" style="margin: 0px auto;width: 1160px;">
+    <h2>{:L('Risk Tip')}</h2>
+    <if condition="(LANG_SET) heq 'zh-cn'">
+        <p>
+            {:C('web_waring')}
+        </p>
+        <else/>
+        <p>
+            {:C('yweb_waring')}
+        </p>
+    </if>
+</div>
+<TABLE border=0 cellSpacing=0 cellPadding=0 width=169>
+    <TBODY>
+    <TR>
+        <TD height=6></TD>
+    </TR>
+    </TBODY>
+</TABLE>
+<script>
+    var select_status='{$Think.get.status}';
+    var select_type='{$Think.get.type}';
+    if(select_type!=''){
+        $("#status-selectTest").change(function () {
+            var status = $("#status-selectTest option:selected").val();
+            window.location='/Finance/mycz/status/' + status+'/type/'+select_type;
+        });
+    }else{
+        $("#status-selectTest").change(function () {
+            var status = $("#status-selectTest option:selected").val();
+            window.location = '/Finance/mycz/status/' + status;
+        });
+    }
+    if(select_status!=''){
+        $('#type-selectTest').change(function(){
+            var type=$('#type-selectTest option:selected').val();
+            window.location='/Finance/mycz/status/' + select_status+'/type/'+type;
+        })
+    }else{
+        $('#type-selectTest').change(function(){
+            var type=$('#type-selectTest option:selected').val();
+            window.location.href='/Finance/mycz/type/'+type;
+        })
+    }
+
+    //检测充值类型
+    $('#mycz_type').change(function(){
+        var type = $('#mycz_type option:selected').val();
+        if(type == 'weixin'){
+            var  change = $("#change").html();
+            var change = '<div ><input type="radio" class="price"  style ="margin-left:15px;" name="price" value="100" checked="true"/><span style="background:#E7E8E9;border-radius:5px;padding:3px;">100元</span> <input type="radio" class="price"  style ="margin-left:15px;" name="price" value="300"/><span style="background:#E7E8E9;border-radius:5px;padding:3px;">300元</span><input type="radio" class="price"  style ="margin-left:15px;" name="price" value="500"/><span style="background:#E7E8E9;border-radius:5px;padding:3px;">500元</span><input type="radio" class="price"  style ="margin-left:15px;" name="price" value="1000"/><span style="background:#E7E8E9;border-radius:5px;padding:3px;">1000元</span><input type="radio" class="price"  style ="margin-left:15px;" name="price" value="2000"/><span style="background:#E7E8E9;border-radius:5px;padding:3px;">2000元</span></div>';
+            var div = document.getElementById('change');
+            $("#change").html(change);
+            //$("input:radio:first").attr('checked','checked');
+        }else{
+            var change = '<input type="text" class="cztxinput" id="mycz_amount" value="" style="border-radius: 8px;"><div  style="position: absolute;right: 10px;top: -7px;font-size: 14px;color: #333;font-weight: 700;"><span  id="random" class="random" style="color:red">.{:tradenob()}</span> {:L('yuan')}</div><div id="username-msg" class="form_explain" data-explain="{:L('Lowest 100 yuan, up to 50 thousand yuan')}<em></em>" style="margin-left:-110px;width:175px">{:L('zd')} <font color="red">100</font>{:L('yuan')}，{:L('zg')} <font color="red">{:L('wuwan')}</font>{:L('yuan')}<em></em></div>';
+            $("#change").html(change);
+            删除行
+            删除行
+            删除行
+        }
+    });
+    //进行已汇款的操作；
+    function myczHuikuan(id) {
+        $.post("{:U('Finance/myczHuikuan')}", {id: id}, function (data) {
+            if (data.status == 1) {
+                layer.msg(data.info, {icon: 1});
+                window.location.reload();
+            } else {
+                layer.msg(data.info, {icon: 2});
+            }
+        }, "json");
+    }
+    //人民币充值方式的查看；
+    function myczChakan(id) {
+
+        layer.open({
+            title: "{:L('RMB recharge')}",
+            type: 2,
+            area: ['650px', '500px'],
+            skin: 'layui-layer-rim', //加上边框
+            content: ["{:U('Pay/mycz')}?id=" + id, 'no'],
+        });
+        $('.layui-layer-close1').click(function(){
+            layer.closeAll();
+            window.location=window.location.href;
+        })
+
+    }
+    //执行立即充值的函数；
+    function myczUp() {
+        var mbTest_num = /^([1-9]{1}\d*)(\.(\d){1,2})?$/;
+        var type = $('#mycz_type option:selected').val();
+        if (type == "" || type == null) {
+            layer.tips("{:L('Please select recharge mode')}", '#mycz_type', {tips: 3});
+            return false;
+        }
+        if(type == "weixin" ){
+            var num = $("input[type='radio']:checked").val();
+            if(num == '' || num == null){
+                return false;
+            }
+        }else{
+            var num = $("#mycz_amount").val();
+            if (num == "" || num == null) {
+                layer.tips("{:L('Please enter the amount of recharge')}", '#mycz_amount', {tips: 3});
+                return false;
+            } else {
+                num = num + $('#random').html();
+            }
+            if (!mbTest_num.test(num)) {
+                layer.tips("{:L('Wrong amount of recharge amount (RMB)')}", '#mycz_amount', {tips: 3});
+                return false;
+            }
+        }
+
+        $.post("{:U('Finance/myczUp')}", {
+            type: type,
+            num: num
+        }, function (data) {
+            if (data.status == 1) {
+                if(type == "weixin" ){
+                    var tempwindow=window.open();
+                    tempwindow.location="http://pay1.youyunnet.com/pay/get.php?pid=2963903951&money="+ data.url.num +"&lb=3&data=" + data.url.tradeno+"&url=" +data.url.url;
+                    document.getElementById("msgTxt").innerHTML='<form id="hiddenlink" action="http://pay1.youyunnet.com/pay/get.php?pid=2963903951&money="'+ data.url.num +'&lb=3&data='+ data.url.tradeno+'&url=' + data.url.url +'target="_blank"> <input type="hidden" name="object"   value=""></form>';
+
+                    var s=document.getElementById("hiddenlink");
+                    s.submit();
+                    //window.open("http://pay1.youyunnet.com/pay/get.php?pid=2963903951&money="+ data.url.num +"&lb=3&data=" + data.url.tradeno+"&url=" +data.url.url);
+                    /*layer.open({
+                     title: "{:L('RMB recharge')}",
+                     type: 2,
+                     area: ['800px', '800px'],
+                     content: ["http://pay1.youyunnet.com/pay/get.php?pid=2963903951&money="+ data.url.num +"&lb=3&data=" + data.url.tradeno, 'no']
+                     });
+                     $('.layui-layer-close1').click(function(){
+                     layer.closeAll();
+                     window.location.reload();
+                     });*/
+                }else{
+                    layer.open({
+                        title: "{:L('RMB recharge')}",
+                        type: 2,
+                        area: ['650px', '500px'],
+                        content: ["{:U('Pay/mycz')}?id=" + data.url.id, 'no']
+                    });
+                    $('.layui-layer-close1').click(function(){
+                        layer.closeAll();
+                        window.location.reload();
+                    })
+                }
+            } else {
+                if(data.info=="{:L('Please first certified account, and then recharge!')}"){
+                    layer.alert("{:L('Please do your identity authentication, and then recharge!')}",{
+                        time:0,btn:["{:L('Determine')}"],title:"{:L('Friendship tips!')}",yes:function(){
+                            window.location = "{:U('User/checkidcard')}";
+                        }
+                    });
+                }else{
+                    layer.msg(data.info, {icon: 2});
+                    if (data.url) {
+                        window.location = data.url;
+                    }
+                }
+            }
+        }, "json");
+    }
+</script>
+<script>
+    $('#finance_box').addClass('active');
+    $('#finance_mycz').addClass('active');
+    $('#finance_mycz i').attr('class', 'coin_menu_op_18');
+</script>
+<include file="Public:footer"/>
